@@ -16,7 +16,7 @@ Browse arXiv, save papers, read offline, and keep research notes on a Kobo runni
 - Use KOReader's native highlights, passage notes, and reading position.
 - Optional shortcut in KOReader's home-folder listing.
 
-No account, separate server, or Node.js runtime is needed on the Kobo. Rakuyomi is not required.
+No account, separate server, or Node.js runtime is needed on the Kobo.
 
 ## Install
 
