@@ -11,7 +11,9 @@ Save to library retains metadata locally. Last search (offline) shows the last f
 
 ## Download and read
 
-Choose Download EPUB for reflowable text from the official HTML article, or Download PDF for original layout.
+Choose Download EPUB for a scientific EPUB with native MathML, a math font, full-resolution artwork, and section navigation; or Download PDF for original layout.
+
+Download EPUB again to create <id>.science.epub. Old <id>.epub files and their annotations are preserved. Read EPUB prefers the scientific edition. See [scientific reading](SCIENTIFIC_READING.md) for zoom and layout controls.
 A successful download offers Read now. Subsequently use My library ? paper ? Read EPUB/PDF.
 The formats are downloaded separately. Missing files produce a Download first message.
 
@@ -33,7 +35,7 @@ EPUB and PDF annotations are separate, as are different versions of a paper.
 
 | Data | Kobo location |
 | --- | --- |
-| Downloaded papers | Articles/<arxiv-id>.epub or .pdf |
+| Downloaded papers | Articles/<arxiv-id>.science.epub or .pdf (legacy .epub files retained) |
 | Exported paper notebooks | Articles/Notes/<arxiv-id>.md |
 | Saved library, notebooks, last results | .adds/koreader/settings/arxivreader.lua and its backup |
 | Passage annotations and reading position | KOReader document metadata, typically .sdr folders, depending on KOReader settings |

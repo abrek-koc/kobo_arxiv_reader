@@ -69,7 +69,7 @@ function App:onArxivReader()
         end},
         {text = "Reading help", callback = function()
             UIManager:show(TextViewer:new{title = "Reading with arXiv Reader", text =
-                "Search by words, author, title, arXiv ID, or an arXiv abstract URL. Advanced arXiv queries such as au:Einstein AND ti:gravity also work.\n\nSave a paper to keep its abstract and notes offline. Download EPUB to turn its HTML article into an adjustable-text book with figures. HTML is not available for every paper. Download PDF for the original layout.\n\nOpen a downloaded paper, long-press text, then choose Highlight or Add note. KOReader keeps these annotations and your reading position. Paper notes are a separate notebook in this app; export them as Markdown from the paper screen. Use KOReader's Export highlights tool for passage annotations.\n\nPapers and exported notes live in Articles/. Your saved library and paper notes live in KOReader settings/arxivreader.lua. Back up both folders, including document .sdr folders.\n\nHTML conversion and equation rendering can vary. Check the PDF if a formula or table looks wrong. The first download needs Wi-Fi; downloaded papers work offline.\n\nIndependent app; not affiliated with arXiv."})
+                "Search by words, author, title, arXiv ID, or an arXiv abstract URL. Advanced arXiv queries such as au:Einstein AND ti:gravity also work.\n\nSave a paper to keep its abstract and notes offline. Download EPUB to create a scientific edition with a math font, section navigation, and full-resolution figures. Long-press a figure to zoom. Use landscape orientation for wide equations and tables. Keep embedded styles and fonts enabled. HTML is not available for every paper. Download PDF for the original layout.\n\nOpen a downloaded paper, long-press text, then choose Highlight or Add note. KOReader keeps these annotations and your reading position. Paper notes are a separate notebook in this app; export them as Markdown from the paper screen. Use KOReader's Export highlights tool for passage annotations.\n\nPapers and exported notes live in Articles/. Your saved library and paper notes live in KOReader settings/arxivreader.lua. Back up both folders, including document .sdr folders.\n\nHTML conversion and equation rendering can vary. Check the PDF if a formula or table looks wrong. The first download needs Wi-Fi; downloaded papers work offline.\n\nIndependent app; not affiliated with arXiv."})
         end},
     })
 end
@@ -104,11 +104,11 @@ function App:browse()
     self:menu("Browse subjects - newest first", rows)
 end
 -- All foreground fetches are cancellable, bounded, and use one connection.
-function App:fetch(address, limit)
+function App:fetch(address, limit, progress_text)
     local socket = require("socket")
     local wait = math.max(0, 3 - (socket.gettime() - (self.last_request or 0)))
     self.last_request = socket.gettime() + wait
-    local progress = InfoMessage:new{ text = "Connecting to arXiv...\nTap to cancel." }
+    local progress = InfoMessage:new{ text = (progress_text or "Connecting to arXiv...") .. "\nTap to cancel." }
     UIManager:show(progress)
     UIManager:forceRePaint()
     local completed, body, err = Trapper:dismissableRunInSubprocess(function()
@@ -270,10 +270,13 @@ function App:status(paper)
 end
 -- PluginLoader reserves self.path for the plugin directory.
 function App:paperFilePath(paper, format)
-    return ROOT .. "/" .. Core.filename(paper.id) .. "." .. format
+    return ROOT .. "/" .. Core.filename(paper.id) .. (format == "epub" and ".science.epub" or "." .. format)
 end
 function App:read(paper, format)
     local path = self:paperFilePath(paper, format)
+    if format == "epub" and not lfs.attributes(path) then
+        path = ROOT .. "/" .. Core.filename(paper.id) .. ".epub" -- Retain access to old annotations.
+    end
     if not lfs.attributes(path) then return self:message("Download the " .. format:upper() .. " first from the paper screen.") end
     paper.status = "Reading" self:remember(paper)
     for menu in pairs(self.menus) do UIManager:close(menu) end
@@ -302,10 +305,12 @@ function App:download(paper, format)
             if not body then return self:message(err) end
             local html, html_err = Core.html(body, paper)
             if not html then return self:message(html_err) end
-            local backend = dofile("plugins/newsdownloader.koplugin/epubdownloadbackend.lua")
-            local success = backend:createEpub(path, html, url, true, paper.title)
+            local backend = dofile(self.path .. "/scientific.lua")
+            local success, build_err = backend.create(path, html, paper, url, self.path, function(address, limit, index, count)
+                return self:fetch(address, limit, "Downloading figure " .. index .. " of " .. count)
+            end)
             Trapper:clear()
-            if not success or not lfs.attributes(path) then return self:message("EPUB was not saved. You can retry or download PDF.") end
+            if not success or not lfs.attributes(path) then return self:message(build_err or "EPUB was not saved. You can retry or download PDF.") end
         end
         self:remember(paper)
         UIManager:show(ConfirmBox:new{text = format:upper() .. " saved for offline reading. Read it now?",

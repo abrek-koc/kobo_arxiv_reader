@@ -8,10 +8,10 @@
 - scripts/build-release.ps1: builds a ZIP with Kobo installation paths.
 - .github/workflows/test.yml: runs tests on Linux and Windows.
 
-The plugin reuses KOReader's UI widgets, network manager, settings, reader engine, and EPUB backend.
+The plugin reuses KOReader's UI widgets, network manager, settings, reader engine, HTML balancer, and ZIP writer. scientific.lua builds EPUB 3 directly.
 It must be launched inside KOReader. Running main.lua with a desktop Lua interpreter will not supply these dependencies.
 
-The download directory is currently Kobo-specific. Metadata/content fetches use cancellable subprocesses and a three-second minimum interval within an app instance. Figure downloads are handled separately by KOReader's existing converter.
+The download directory is currently Kobo-specific. Metadata/content fetches use cancellable subprocesses and a three-second minimum interval within an app instance. Figures use the same cancellable fetch and rate pacing. Missing or invalid figures abort conversion.
 
 ## Tests
 
@@ -41,5 +41,5 @@ These checks are pending for the packaged release; do not describe mocked tests 
 ## Release
 
 Run tests and scripts/build-release.ps1 on Windows.
-The script includes only the plugin and optional patch under .adds/koreader, plus the README, documentation, and LICENSE.
+The script includes only the plugin and optional patch under .adds/koreader, plus the README, documentation, and LICENSE. The plugin includes STIX Two Math and its OFL license.
 dist/ is ignored by Git. Rebuild it after changing source or package version.

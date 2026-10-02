@@ -9,7 +9,7 @@ Browse arXiv, save papers, read offline, and keep research notes on a Kobo runni
 - Search by keywords, author/title queries, arXiv IDs, or abstract/HTML/PDF links.
 - Browse subjects, newest first, with paginated results.
 - Save abstracts and metadata to a local library.
-- Convert available HTML articles to EPUB, including figures, using KOReader's bundled news downloader.
+- Build scientific EPUB 3 editions with MathML, embedded STIX Two Math, full-resolution figures, and section navigation.
 - Download original PDFs and read either format offline.
 - Track To read / Reading / Finished status.
 - Write multiline paper notes and export them as Markdown.
@@ -29,7 +29,13 @@ No account, separate server, or Node.js runtime is needed on the Kobo. Rakuyomi 
 
 The shortcut is in KOReader's file browser, not the stock Kobo home screen. Do not install it if another custom patch already provides the same shortcut; see [installation details](docs/INSTALLATION.md).
 
-The EPUB conversion feature requires KOReader's bundled `newsdownloader.koplugin/epubdownloadbackend.lua`. This plugin is not bundled here.
+The scientific EPUB builder uses KOReader's native HTML balancer and ZIP writer directly. The news downloader plugin is no longer required.
+
+## Scientific reading (0.2.0)
+
+Download EPUB again to create the new `.science.epub` edition. Old EPUBs and annotations are kept. Read EPUB prefers the new edition; annotations do not transfer.
+
+Keep embedded styles and fonts enabled. Long-press graphs to zoom/pan, use the section table of contents, and rotate to landscape for wide material. See [scientific reading](docs/SCIENTIFIC_READING.md).
 
 ## First paper
 
@@ -53,7 +59,7 @@ Searches contact arXiv; EPUB creation also retrieves article figures. There is n
 
 - Kobo storage path is currently fixed to `/mnt/onboard/Articles`; other KOReader platforms are not supported by this version.
 - MathML, complex tables, and figures need checking on the device. Use the original PDF when accuracy of layout matters.
-- Response limits: 2 MiB metadata, 15 MiB HTML, 40 MiB PDF. These limits do not cover figure downloads handled by KOReader's EPUB backend.
+- Response limits: 2 MiB metadata, 15 MiB HTML, 40 MiB PDF. Figures are limited to 20 MiB each and 100 MiB total. Failed or unsupported figures stop conversion.
 - The last search page is cached; there is no full offline search index.
 - Paper notes and document highlights are separate. EPUB/PDF annotations and different paper versions do not merge.
 - No cloud sync, background subscriptions, or phone link receiver yet.
@@ -79,7 +85,7 @@ On Windows, build a USB-ready release ZIP:
 powershell -NoProfile -File scripts/build-release.ps1
 ```
 
-Output: `dist/kobo-arxiv-reader-0.1.0.zip`. The archive contains a `.adds/koreader/` tree with the plugin and optional shortcut. Inspect existing patches before extracting it onto a device.
+Output: `dist/kobo-arxiv-reader-0.2.0.zip`. The archive contains a `.adds/koreader/` tree with the plugin and optional shortcut. Inspect existing patches before extracting it onto a device.
 
 See [development and device checks](docs/DEVELOPMENT.md).
 
@@ -98,6 +104,6 @@ The local repository has no remote configured. Attach the ZIP to a GitHub releas
 
 ## License and acknowledgements
 
-MIT; see [LICENSE](LICENSE). KOReader and its bundled dependencies retain their own licenses and are not distributed here. Uses arXiv's public metadata and article services. Papers retain their respective copyrights and licenses.
+Plugin code is MIT; see [LICENSE](LICENSE). The bundled math font uses the SIL Open Font License in arxivreader.koplugin/assets/OFL.txt. KOReader and its bundled dependencies retain their own licenses and are not distributed here. Uses arXiv's public metadata and article services. Papers retain their respective copyrights and licenses.
 
 Independent project; not affiliated with or endorsed by arXiv or Kobo.

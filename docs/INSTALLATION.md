@@ -4,7 +4,7 @@
 
 - A Kobo with KOReader installed. The development target is Clara BW, KOReader v2026.07.1.
 - Wi-Fi for searches and downloads.
-- KOReader's bundled news downloader code for HTML-to-EPUB conversion.
+- KOReader's native HTML balancer and ZIP writer (bundled with the development target).
 - USB access to the device's visible storage. Enable hidden-folder display to see .adds.
 
 ## Manual installation
@@ -20,6 +20,10 @@ Copy the repository's arxivreader.koplugin directory to:
           _meta.lua
           core.lua
           main.lua
+          scientific.lua
+          assets/
+            STIXTwoMath-Regular.otf
+            OFL.txt
 ```
 
 Avoid nesting arxivreader.koplugin inside another copy of that folder.
@@ -36,7 +40,7 @@ Existing custom home patches may already provide an arXiv shortcut. In that case
 ## Updating
 
 Close KOReader and back up settings/arxivreader.lua and its backups, Articles/, and document metadata.
-Replace the three files inside plugins/arxivreader.koplugin with the new version.
+Replace the plugin files and assets/ folder inside plugins/arxivreader.koplugin with the new version.
 Replace the optional shortcut only if you installed this repository's shortcut.
 Eject and restart. Installation does not require deleting saved data.
 

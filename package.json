@@ -1,11 +1,11 @@
 {
   "name": "kobo-arxiv-reader",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "arXiv reading and research notes for KOReader on Kobo",
   "license": "MIT",
   "scripts": {
-    "test": "node tests/validate.cjs && node tests/shortcut.cjs"
+    "test": "node tests/validate.cjs && node tests/shortcut.cjs && node tests/scientific.cjs"
   },
   "engines": {
     "node": ">=20"
