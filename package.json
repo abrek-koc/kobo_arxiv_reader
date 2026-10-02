@@ -1,17 +1,21 @@
 {
   "name": "kobo-arxiv-reader",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "description": "arXiv reading and research notes for KOReader on Kobo",
   "license": "MIT",
   "scripts": {
-    "test": "node tests/validate.cjs && node tests/shortcut.cjs && node tests/scientific.cjs"
+    "test": "node tests/validate.cjs && node tests/shortcut.cjs && node tests/scientific.cjs && node tests/layout-regression.cjs",
+    "review:eagle": "node scripts/review-eagle3.cjs"
   },
   "engines": {
     "node": ">=20"
   },
   "devDependencies": {
     "fengari": "0.1.4",
-    "luaparse": "0.3.1"
+    "fflate": "^0.8.2",
+    "luaparse": "0.3.1",
+    "parse5": "^7.2.1",
+    "playwright": "^1.51.1"
   }
 }

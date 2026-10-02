@@ -270,12 +270,15 @@ function App:status(paper)
 end
 -- PluginLoader reserves self.path for the plugin directory.
 function App:paperFilePath(paper, format)
-    return ROOT .. "/" .. Core.filename(paper.id) .. (format == "epub" and ".science.epub" or "." .. format)
+    return ROOT .. "/" .. Core.filename(paper.id) .. (format == "epub" and ".science-v3.epub" or "." .. format)
 end
 function App:read(paper, format)
     local path = self:paperFilePath(paper, format)
     if format == "epub" and not lfs.attributes(path) then
-        path = ROOT .. "/" .. Core.filename(paper.id) .. ".epub" -- Retain access to old annotations.
+        path = ROOT .. "/" .. Core.filename(paper.id) .. ".science.epub"
+        if not lfs.attributes(path) then
+            path = ROOT .. "/" .. Core.filename(paper.id) .. ".epub" -- Retain older annotations.
+        end
     end
     if not lfs.attributes(path) then return self:message("Download the " .. format:upper() .. " first from the paper screen.") end
     paper.status = "Reading" self:remember(paper)

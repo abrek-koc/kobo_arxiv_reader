@@ -92,13 +92,19 @@ app:status(papers[1])
 shown[#shown].item_table[3].callback()
 check(papers[1].status=="Finished","reading status")
 app:read(papers[1],"epub")
-check(opened=="/mnt/onboard/Articles/2402.08954v2.science.epub" and papers[1].status=="Reading","reader integration")
+check(opened=="/mnt/onboard/Articles/2402.08954v2.science-v3.epub" and papers[1].status=="Reading","reader integration")
 app:read(papers[1],"pdf")
 check(opened=="/mnt/onboard/Articles/2402.08954v2.pdf","PDF reader integration")
 app:download(papers[1],"epub")
 check(shown[#shown].text:find("Already downloaded",1,true),"existing EPUB download path")
 app:download(papers[1],"pdf")
 check(shown[#shown].text:find("Already downloaded",1,true),"existing PDF download path")
+mods["libs/libkoreader-lfs"].attributes = function(path) return path == "/mnt/onboard/Articles/2402.08954v2.science.epub" and {mode="file"} or nil end
+app:read(papers[1],"epub")
+check(opened=="/mnt/onboard/Articles/2402.08954v2.science.epub","previous scientific edition remains readable")
+mods["libs/libkoreader-lfs"].attributes = function(path) return path == "/mnt/onboard/Articles/2402.08954v2.epub" and {mode="file"} or nil end
+app:read(papers[1],"epub")
+check(opened=="/mnt/onboard/Articles/2402.08954v2.epub","legacy edition remains readable")
 mods["libs/libkoreader-lfs"].attributes = function() return nil end
 opened = nil
 app:read(papers[1],"epub")
