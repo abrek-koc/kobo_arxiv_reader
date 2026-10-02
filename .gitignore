@@ -1,0 +1,12 @@
+node_modules/
+dist/
+*.log
+.DS_Store
+Thumbs.db
+.env
+.env.*
+Articles/
+*.sdr/
+settings/
+*.epub
+*.pdf
